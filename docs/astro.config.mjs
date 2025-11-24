@@ -73,6 +73,7 @@ export default defineConfig({
 				{
 					label: 'Start Here',
 					translations: {
+						da: 'Start her',
 						de: 'Beginne hier',
 						es: 'Comienza aqui',
 						ja: 'ここからはじめる',
@@ -95,6 +96,7 @@ export default defineConfig({
 							label: 'Environmental Impact',
 							slug: 'environmental-impact',
 							translations: {
+								da: 'Miljø Påvirkning',
 								de: 'Umweltbelastung',
 								es: 'Documentación ecológica',
 								ja: '環境への負荷',
@@ -116,6 +118,7 @@ export default defineConfig({
 				{
 					label: 'Guides',
 					translations: {
+						da: 'Guides',
 						de: 'Anleitungen',
 						es: 'Guías',
 						ja: 'ガイド',
@@ -136,6 +139,7 @@ export default defineConfig({
 				{
 					label: 'Components',
 					translations: {
+						da: 'Komponenter',
 						de: 'Komponenten',
 						fr: 'Composants',
 						ru: 'Компоненты',
@@ -149,6 +153,7 @@ export default defineConfig({
 				{
 					label: 'Reference',
 					translations: {
+						da: 'Reference',
 						de: 'Referenzen',
 						es: 'Referencias',
 						ja: 'リファレンス',
@@ -168,6 +173,7 @@ export default defineConfig({
 				{
 					label: 'Resources',
 					translations: {
+						da: 'Ressourcer',
 						de: 'Ressourcen',
 						'zh-CN': '资源',
 						fr: 'Ressources',

@@ -1,0 +1,143 @@
+---
+title: Kom i gang
+description: Lær at bygge din næste dokumentations side med Starlight fra Astro
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Starlight er et full-featured dokumentations tema bygget ovenpå [Astro](https://astro.build) frameworket.
+Den her guide vil hjælpe dig med at komme i gang med et nyt projekt.
+Se de [manuelle setup instruktioner](/manual-setup) for at tilføje Starlight til et eksisterende Astro projekt.
+
+## Hurtig start
+
+### Opret et nyt projekt
+
+Opret et nyt Astro + Starlight projekt ved at køre følgende kommando i din terminal:
+
+<Tabs syncKey="pkg">
+<TabItem label="npm">
+
+```sh
+npm create astro@latest -- --template starlight
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```sh
+pnpm create astro --template starlight
+```
+
+</TabItem>
+<TabItem label="Yarn">
+
+```sh
+yarn create astro --template starlight
+```
+
+</TabItem>
+</Tabs>
+
+Det vil oprette en ny [projekt mappe](/guides/project-structure/) med alle de nødvendige filer og konfigurationer for dit projekt.
+
+:::tip[Se det i aktion!]
+Prøv Starlight i din browser:
+[Åben skabelonen i stackblitz](https://stackblitz.com/github/withastro/starlight/tree/main/examples/basics).
+:::
+
+### Start udviklings serveren
+
+Når du arbejder lokalt vil [Astros udviklings server](https://docs.astro.build/en/reference/cli-reference/#astro-dev) lader dig previewe dit arbejde og genopfrisker automatisk din browser når du laver ændringer.
+
+Inde i dit projekts mappe, kør den følgende kommando for at starte udviklings serveren:
+
+<Tabs syncKey="pkg">
+<TabItem label="npm">
+
+```sh
+npm run dev
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```sh
+pnpm dev
+```
+
+</TabItem>
+<TabItem label="Yarn">
+
+```sh
+yarn dev
+```
+
+</TabItem>
+</Tabs>
+
+Dette vil logge en besked til din terminal med URL'en fra dit locale preview.
+Åben URL'en for at begynde at browse din side.
+
+### Tilføj indhold
+
+Starlight er klar til at _du_ tilføjer nyt indhold, eller bringer dine eksisterende filer!
+
+Tilføj nye sider til dit projekt ved at oprette Markdown filer i `src/content/docs` mappen.
+
+Læs mere om fil-baseret routing og support for MDX og Markdoc filer i ["Pages"](/guides/pages/) guiden.
+
+### Næste steps
+
+- **Konfigurer:** Lær om almindelige valg i ["Customizing Starlight"](/guides/customization).
+- **Navigate:** Set up your sidebar with the [“Sidebar Navigation”](/guides/sidebar/) guide.
+- **Komponenter:** Opdag indbyggede kort, tabs, og meget mere i ["Components"](/components/using-components/) guiden.
+- **Udvid:** Opdag community add-ons i vores ["Plugins"](/resources/plugins/) og ["Themes"](/resources/themes/) kataloger.
+- **Deploy:** Udgiv dit arbejde med ["Deploy your site"](https://docs.astro.build/en/guides/deploy/) guiden i Astro docs'ene.
+## Opdater Starlight
+
+:::tip
+Fordi Starlight er beta software, vil der være hyppige opdateringer og forbedringer.
+Sørg for at opdatere Starlight regelmæssigt
+:::
+
+Starlight er en Astro integration. Du kan opdatere den og andre Astro pakker ved at køre følgende kommando i din terminal:
+
+<Tabs syncKey="pkg">
+<TabItem label="npm">
+
+```sh
+npx @astrojs/upgrade
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```sh
+pnpm dlx @astrojs/upgrade
+```
+
+</TabItem>
+<TabItem label="Yarn">
+
+```sh
+yarn dlx @astrojs/upgrade
+```
+
+</TabItem>
+</Tabs>
+
+Se [Starlight changeloggen](https://github.com/withastro/starlight/blob/main/packages/starlight/CHANGELOG.md) for en fuld liste af ændringer lavet i hver enkelt udgivelse.
+
+## Troubleshooting Starlight
+
+Brug [projekt konfigurationen](/reference/configuration/) og [individuel frontmatter konfigurationen](/reference/frontmatter) for at sikre dig at din Starlight side er konfigureret og fungerer ordentligt.
+Se guiden i sidebaren for hjælp med at tilføje indhold og tilpasse dit Starlight projekt
+
+If your answer cannot be found in these docs, please visit the [full Astro Docs](https://docs.astro.build) for complete Astro documentation.
+Your question may be answered by understanding how Astro works in general, underneath this Starlight theme.
+
+Hvis dit svar ikke findes i disse docs, besøg venligst de [fulde Astro docs](https://docs.astro.build) for komplet Astro dokumentation.
+Dit spørgsmål bliver måske besvaret af at vide hvordan Astro fungerer, helt overordnet, under det her Starlight tema.
+
+Du kan også checke for nogle kendte [Starlight issues på Github](https://github.com/withastro/starlight/issues), og få hjælp i [Astro Discorden](https://astro.build/chat/) fra vores aktive, venlige community! Stil spørgsmål i vores `#support` forum med "starlight" tagget, eller besøg vores dedikerede `#starlight` kanal for a diskutere nuværende development og mere! 
