@@ -1,0 +1,345 @@
+---
+title: CSS & Styling
+description: Lær hvordan du kan style dit Starlight projekt med custom CSS eller integration med TailwindCSS
+---
+
+import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+Du kan style dit Starlight projekt med tilpassede CSS filer eller bruge Starlight Tailwind pluginet.
+
+For en hurtig måde at ændre standardstilen på dit projekt, check [community themes](/resources/themes) ud.
+
+## Tilpassede CSS styles
+
+Tilpas stilen anvendt på dit Starlight projekt ved at give yderligere CSS filer til at modificere eller udvide Starlights standard stiler.
+
+<Steps>
+
+1. Tilføj en CSS fil til din `src/` mappe.
+   For eksempel kan du sætte en bredere standard kolonnebredde og større tekst størrelse for side titler:
+
+   ```css
+   /* src/styles/custom.css */
+   :root {
+   	--sl-content-width: 50rem;
+   	--sl-text-5xl: 3.5rem;
+   }
+   ```
+
+2. Tilføj stien til din CSS fil til Starlights `customCss` arrary i `astro.config.mjs`:
+
+   ```diff lang="js"
+   // astro.config.mjs
+   import { defineConfig } from 'astro/config';
+   import starlight from '@astrojs/starlight';
+
+   export default defineConfig({
+   	integrations: [
+   		starlight({
+   			title: 'Docs med Custom CSS',
+   			customCss: [
+   +				// Relativ sti til din CSS
+   +				'./src/styles/custom.css',
+   			],
+   		}),
+   	],
+   });
+   ```
+
+</Steps>
+
+Du kan se alle de tilpassede CSS ejendomme brugt af Starlight som du kan bruge til at tilpasse dit projekt i [`props.css` filen på Github](https://github.com/withastro/starlight/blob/main/packages/starlight/style/props.css).
+
+### Kaskade lag
+
+Starlight bruger [kaskade lag](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Cascade_layers) internt for at håndtere rækkefølgen af dens stile.
+Det sikrer en forudsigelig CSS rækkefølge og tillader simplere overrides.
+Ethver tilpasset ulagret CSS vil override Starlights standard stile.
+
+Hvis du bruger kaskade lag, kan du bruge [`@layer`](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer) i din tilpassede CSS for at definere rækkefølgen for de forskellige lag, relative til stiler fra `starlight` laget:
+
+```css "starlight"
+/* src/styles/custom.css */
+@layer my-reset, starlight, my-overrides;
+```
+
+Eksemplet ovenover definerer et tilpasset lag kaldet `my-reset`, anvendt før alle andre Starlight lag, og en anden kaldet `my-overrides`, anvendt efter alle Starlight lag.
+Hvilke som helst stiler i `my-overrides` laget ville tage præcedens over Starlights stiler, men Starlight kunne stadig skifte stile, sat i `my-reset` laget.
+
+## Tailwind CSS
+
+Tailwind CSS v4 support i Astro projekter er sørget for af [Tailwind Vite pluginet](https://tailwindcss.com/docs/installation/using-vite).
+Starlight skaffer komplementært CSS for at hjælpe med at konfigurere Tailwind for kompatibilitet med Starlights stile.
+
+Starlight Tailwind CSS'en anvender følgende konfiguration:
+
+- Konfigurerer Tailwinds `dark:` varianter til at virke med Starlights dark mode.
+- Bruger Tailwind [tema farver og skrifttyper](#style-starlight-med-tailwind) i Starlights UI.
+- Genskaber essentiele dele af Tailwinds Preflight reset styles.
+
+### Opret et nyt projekt med Tailwind
+
+Start et nyt Starlight projekt med Tailwind CSS præ-konfigureret ved at bruge `create astro`:
+
+<Tabs syncKey="pkg">
+<TabItem label="npm">
+
+```sh
+npm create astro@latest -- --template starlight/tailwind
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```sh
+pnpm create astro --template starlight/tailwind
+```
+
+</TabItem>
+<TabItem label="Yarn">
+
+```sh
+yarn create astro --template starlight/tailwind
+```
+
+</TabItem>
+</Tabs>
+
+### Tilføj Tailwind til et eksisterende projekt
+
+Hvis du allerede har et Starlight projekt og vil tilføje Tailwind CSS, så følg disse steps.
+
+<Steps>
+
+1.  Sæt Tailwind op i dit projekt ved at køre følgende kommandoer og følg instruktionerne i din terminal:
+
+    <Tabs syncKey="pkg">
+
+    <TabItem label="npm">
+
+    ```sh
+    npx astro add tailwind
+    ```
+
+    </TabItem>
+
+    <TabItem label="pnpm">
+
+    ```sh
+    pnpm astro add tailwind
+    ```
+
+    </TabItem>
+
+    <TabItem label="Yarn">
+
+    ```sh
+    yarn astro add tailwind
+    ```
+
+    </TabItem>
+
+    </Tabs>
+
+2.  Installer Starlights Tailwind compatibility pakke
+
+    <Tabs syncKey="pkg">
+
+    <TabItem label="npm">
+
+    ```sh
+    npm install @astrojs/starlight-tailwind
+    ```
+
+    </TabItem>
+
+    <TabItem label="pnpm">
+
+    ```sh
+    pnpm add @astrojs/starlight-tailwind
+    ```
+
+    </TabItem>
+
+    <TabItem label="Yarn">
+
+    ```sh
+    yarn add @astrojs/starlight-tailwind
+    ```
+
+    </TabItem>
+
+    </Tabs>
+
+3.  Udskift indholdet i `src/styles/global.css` filen opsat af Astro for kompatibilitet med Starlight:
+
+    ```css
+    /* src/styles/global.css */
+    @layer base, starlight, theme, components, utilities;
+
+    @import '@astrojs/starlight-tailwind';
+    @import 'tailwindcss/theme.css' layer(theme);
+    @import 'tailwindcss/utilities.css' layer(utilities);
+    ```
+
+    Dette Tailwind tema config definerer Starlights [kaskade lags](#kaskade-lag) rækkefølge, importerer Starlights Tailwind komplementært CSS og importerer Tailwind tema og utility styles.
+    Hvis dit projekt kræver ekstra Tailwind konfiguration, check ["Brug flere Tailwind konfigurationer"](#brug-flere-tailwind-konfigurationer) sektionen ud.
+
+
+4.  Opdater Starlight konfigurationen for at tilføje Tailwind CSS filen som det første element i `customCss` arrayen:
+
+    ```js ins={11-12}
+    // astro.config.mjs
+    import { defineConfig } from 'astro/config';
+    import starlight from '@astrojs/starlight';
+    import tailwindcss from '@tailwindcss/vite';
+
+    export default defineConfig({
+    	integrations: [
+    		starlight({
+    			title: 'Docs with Tailwind',
+    			customCss: [
+    				// Sti til dine Tailwind grund styles:
+    				'./src/styles/global.css',
+    			],
+    		}),
+    	],
+    	vite: { plugins: [tailwindcss()] },
+    });
+    ```
+
+</Steps>
+
+### Style Starlight med Tailwind
+
+Når du [opretter et nyt Starlight projekt med Tailwind](#opret-et-nyt-projekt-med-tailwind), eller når du [tilføjer Tailwind til et eksisterende Starlight projekt](#tilføj-tailwind-til-et-eksisterende-projekt), vil Starlight bruge værdier fra din [Tailwind theme config](https://tailwindcss.com/docs/theme), lokeret i `src/styles/global.css` filen, for at style dens UI
+
+Hvis sat, vil følgende CSS tilpassede ejendomme override Starlights standard-stile:
+
+- `--color-accent-*` — brugt til links og "current item" highlighting
+- `--color-gray-*` — brugt til baggrundsfarver og borders
+- `--font-sans` — brught til UI og indholdstekst
+- `--font-mono` — brugt til kodeeksempler
+
+```css {9,11,13,25}
+/* src/styles/global.css */
+@layer base, starlight, theme, components, utilities;
+
+@import '@astrojs/starlight-tailwind';
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@theme {
+	/* Din preferrede skrifttype. Starlight bruger en system skrifttype stack automatisk. */
+	--font-sans: 'Atkinson Hyperlegible';
+	/* Din preferrede kode-skrifttype. Starlight bruger system monospace skrifttyper automatisk. */
+	--font-mono: 'IBM Plex Mono';
+	/* Din preferrede accent farve. Indigo er tættest på Starlight’s standarder. */
+	--color-accent-50: var(--color-indigo-50);
+	--color-accent-100: var(--color-indigo-100);
+	--color-accent-200: var(--color-indigo-200);
+	--color-accent-300: var(--color-indigo-300);
+	--color-accent-400: var(--color-indigo-400);
+	--color-accent-500: var(--color-indigo-500);
+	--color-accent-600: var(--color-indigo-600);
+	--color-accent-700: var(--color-indigo-700);
+	--color-accent-800: var(--color-indigo-800);
+	--color-accent-900: var(--color-indigo-900);
+	--color-accent-950: var(--color-indigo-950);
+	/* Din preferrede gray scale. Zinc er tættest på Starlight’s standarder. */
+	--color-gray-50: var(--color-zinc-50);
+	--color-gray-100: var(--color-zinc-100);
+	--color-gray-200: var(--color-zinc-200);
+	--color-gray-300: var(--color-zinc-300);
+	--color-gray-400: var(--color-zinc-400);
+	--color-gray-500: var(--color-zinc-500);
+	--color-gray-600: var(--color-zinc-600);
+	--color-gray-700: var(--color-zinc-700);
+	--color-gray-800: var(--color-zinc-800);
+	--color-gray-900: var(--color-zinc-900);
+	--color-gray-950: var(--color-zinc-950);
+}
+```
+
+### Brug flere Tailwind konfigurationer
+
+Flere Tailwind-konfigurationer kan bruges til at anvende forskellige stilarter til forskellige dele af dit websted, f.eks. når du [bruger Starlight på en subpath](/manual-setup/#use-starlight-at-a-subpath) eller når du tilføjer [tilpassede sider](/guides/pages/#custom-pages) til dit websted.
+For eksempel vil du måske bruge Tailwinds Preflight reset styles på dine brugerdefinerede sider, mens du stadig anvender Starlights kompatibilitetslag på Starlight-sider.
+
+Den følgende Tailwind CSS konfiguration sætter Tailwind op uden nogen plugins eller ekstra konfiguration og kan bruges som udgangspunkt for ikke-Starlight-sider:
+```css title="src/styles/custom-pages-tailwind.css"
+/* Indlæs Tailwind uden nogen af ​​Starlights komplementære CSS. */
+@import 'tailwindcss';
+```
+
+<Steps>
+
+1. For Starlight-sider skal du anvende din foretrukne Tailwind CSS-konfiguration ved at ["tilføje Tailwind til et eksisterende projekt”](#add-tailwind-to-an-existing-project).
+2. For andre sider skal du anvende din foretrukne Tailwind CSS-konfiguration ved at importere den til de sider. Dette gøres ofte i et layout komponent, så Tailwind-stile kan bruges på alle sider, der deler det layout.   
+   ```astro
+   ---
+   // src/layouts/CustomPageLayout.astro
+   import '../styles/custom-pages-tailwind.css';
+   ---
+   ```
+
+</Steps>
+
+
+For at lære mere om Tailwind-themekonfigurationer, se [Tailwind CSS-dokumentationen](https://tailwindcss.com/docs/theme).
+## Theming
+
+Starlights farvetema kan styres ved at override dets standard egenskaber.
+Disse variabler bruges i hele brugergrænsefladen med en række grå nuancer, der bruges til tekst- og baggrundsfarver og en accentfarve, der bruges til links og til at fremhæve aktuelle elementer i navigationen.
+
+### Farve tema editor
+
+Brug sliderne nedenfor til at ændre Starlights accent og grå farvepaletter.
+De mørke og lyse forhåndsvisningsområder viser de resulterende farver, og hele siden opdateres også for at få vist dine ændringer.
+
+Brug indstillingen Contrast Level til at angive, hvilke af Web Content Accessibility Guideline [farvekontraststandarder](https://developer.mozilla.org/en-US/docs/Web/Accessibility/Understanding_WCAG/Perceivable/Color_contrast) der skal overholdes.
+Når du er tilfreds med dine ændringer, kan du kopiere CSS- eller Tailwind-koden nedenfor og bruge den i dit projekt.
+
+import ThemeDesigner from '~/components/theme-designer.astro';
+
+<ThemeDesigner
+	labels={{
+		presets: {
+			label: 'Presets',
+			ocean: 'Ocean',
+			forest: 'Forest',
+			oxide: 'Oxide',
+			nebula: 'Nebula',
+			default: 'Default',
+			random: 'Random',
+		},
+		contrast: {
+			label: 'Kontrast Niveau',
+		},
+		editor: {
+			accentColor: 'Accent',
+			grayColor: 'Gray',
+			hue: 'Hue',
+			chroma: 'Chroma',
+			pickColor: 'Vælg farve',
+		},
+		preview: {
+			darkMode: 'Dark mode',
+			lightMode: 'Light mode',
+			bodyText:
+				'Brødtekst vises i en grå nuance med høj kontrast til baggrunden.',
+			linkText: 'Links er farvede.',
+			dimText: 'Noget tekst, som indholdsfortegnelsen, har en lavere kontrast.',
+			inlineCode: 'Inline kode har en særskilt baggrund.',
+		},
+	}}
+>
+	<Fragment slot="css-docs">
+		Tilføj følgende CSS til dit projekt i en [custom CSS
+		fil](#tilpassede-css-styles) for at anvende dette tema på dit websted.
+	</Fragment>
+	<Fragment slot="tailwind-docs">
+		Tilføj følgende CSS-variable til `@theme`-blokken i din [Tailwind CSS
+		fil](#style-starlight-med-tailwind) for at anvende dette tema på dit websted.
+	</Fragment>
+</ThemeDesigner>
